@@ -167,7 +167,7 @@ var newPlayer = function(replace, width, height) {
 		self.frame.width  = self.width  = 960;
 		self.frame.height = self.height = 536;
 		self.updateSize();
-		self.updatePlayed();
+		self.updatePosition();
 		self.updateLoaded();
 	};
 
@@ -183,7 +183,7 @@ var newPlayer = function(replace, width, height) {
 		self.video.height = self.widescreenData.original[5];
 
 		self.updateSize();
-		self.updatePlayed();
+		self.updatePosition();
 		self.updateLoaded();
 		delete self['widescreenData'];
 	};
