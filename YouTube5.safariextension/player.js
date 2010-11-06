@@ -153,7 +153,7 @@ var newPlayer = function(replace, width, height) {
 		var styleTag = document.createElement('style');
 		styleTag.setAttribute('type', 'text/css');
 		styleTag.textContent = [
-			'.player-new-ui #watch-sidebar { margin-top: 200px; }',
+			'#watch-panel, .player-new-ui #watch-sidebar { margin-top: 200px; }',
 			'#watch-discussion { margin-top: 104px; }'
 		].join("\n");
 
