@@ -146,7 +146,52 @@ var newPlayer = function(replace, width, height) {
 		
 		event.target.parentNode.className = 'youtube5current-format';
 	};
-	
+
+	self.enterWideScreen = function() {
+		if (self.isWidescreen()) return;
+
+		var styleTag = document.createElement('style');
+		styleTag.setAttribute('type', 'text/css');
+		styleTag.textContent = [
+			'.player-new-ui #watch-sidebar { margin-top: 200px; }',
+			'#watch-discussion { margin-top: 104px; }'
+		].join("\n");
+
+		document.getElementsByTagName("head")[0].appendChild(styleTag);
+
+		self.widescreenData = {
+			'style': styleTag,
+			'original': [self.width, self.height, self.frame.width, self.frame.height, self.video.width, self.video.height]
+		};
+
+		self.frame.width  = self.width  = 960;
+		self.frame.height = self.height = 536;
+		self.updateSize();
+		self.updatePlayed();
+		self.updateLoaded();
+	};
+
+	self.leaveWideScreen = function() {
+		if (!self.isWidescreen()) return;
+
+		self.widescreenData.style.parentNode.removeChild(self.widescreenData.style);
+		self.width  = self.widescreenData.original[0];
+		self.height = self.widescreenData.original[1];
+		self.frame.width  = self.widescreenData.original[2];
+		self.frame.height = self.widescreenData.original[3];
+		self.video.width  = self.widescreenData.original[4];
+		self.video.height = self.widescreenData.original[5];
+
+		self.updateSize();
+		self.updatePlayed();
+		self.updateLoaded();
+		delete self['widescreenData'];
+	};
+
+	self.isWidescreen = function() {
+		return !!self['widescreenData'];
+	};
+
 	self.initVideo = function() {
 		self.updateSize();
 		self.createControls();
@@ -262,6 +307,11 @@ var newPlayer = function(replace, width, height) {
 		self.playPause = create('div', self.controls, 'youtube5play-pause');
 		self.timeElapsed = create('div', self.controls, 'youtube5time-elapsed');
 		self.fullscreen = create('div', self.controls, 'youtube5fullscreen');
+
+		if (location.host.match(/\.youtube\.com$/)) {
+			self.widescreen = create('div', self.controls, 'youtube5widescreen');
+		}
+		
 		self.volume = create('div', self.controls, 'youtube5volume');
 		create('div', self.volume, 'youtube5volume-indicator');
 		self.volumePopup = create('div', self.volume, 'youtube5volume-popup');
@@ -284,11 +334,18 @@ var newPlayer = function(replace, width, height) {
 		self.position.min = 0;
 		self.position.max = 1000;
 		self.position.value = 0;
-		
+
 		self.playPause.addEventListener('click', self.playOrPause, true);
 		
 		self.fullscreen.addEventListener('click', function() {
 			self.video.webkitEnterFullScreen();
+		}, true);
+
+		self.widescreen.addEventListener('click', function() {
+			if (self.isWidescreen())
+				self.leaveWideScreen();
+			else
+				self.enterWideScreen();
 		}, true);
 
 		self.volumeSlider.addEventListener('change', function() {
