@@ -30,7 +30,7 @@
 	</dict>
 	<dict>
 		<key>DefaultValue</key>
-		<string>360p</string>
+		<string>720p</string>
 		<key>Key</key>
 		<string>youTubeFormat</string>
 		<key>Title</key>
@@ -70,7 +70,7 @@
 	</dict>
 	<dict>
 		<key>DefaultValue</key>
-		<string>SD</string>
+		<string>HD</string>
 		<key>Key</key>
 		<string>vimeoFormat</string>
 		<key>Title</key>

@@ -6,6 +6,22 @@ if (!/youtube\.com\/leanback/.test(document.location.href)) {
 		
 		event.target.youtube5checked = true;
 		
+		scripts = [
+			[/^https?:\/\/([a-z\-\.]+)?static\.ak\.facebook\.com\/rsrc.php\/v1\/yB\/r\/K91kzr0nBcr\.js/i, 'fbswffix.js'],
+			[/^https?:\/\/s\.ytimg\.com\/yt\/jsbin\/www-core-vflv-Cxef\.js/i, 'ytswffix.js'],
+			[/^https?:\/\/([a-z\-\.]+)?static\.ak\.facebook\.com\/rsrc.php\/v1\/yZ\/r\/ijnRamAy6bi\.js/i, 'fbswffix2.js']
+		];
+		
+		for (var i = 0; i < scripts.length; i++) {
+			if (scripts[i][0].test(event.url)) {
+				event.preventDefault();
+				var s = document.createElement('script');
+				s.src = safari.extension.baseURI + scripts[i][1];
+				s.type = 'text/javascript';
+				event.target.parentNode.replaceChild(s, event.target);
+			}
+		}
+		
 		// for some reason the url doesn't stay in the event when its passed to the global page, so we have to set it as the message
 		var result = safari.self.tab.canLoad(event, event.url);
 		
